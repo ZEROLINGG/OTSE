@@ -1,6 +1,6 @@
-# STA_OCR
+# OTSE
 
-**STA_OCR** 是一个运行在 Windows 平台下的 C++ 辅助工具，旨在扩展 [Snipaste](https://www.snipaste.com/) 的截图功能。
+**OTSE** 是一个运行在 Windows 平台下的 C++ 辅助工具，旨在扩展 [Snipaste](https://www.snipaste.com/) 的截图功能。
 
 它作为一个后台进程运行，当用户在使用 Snipaste 截图并按下 `Enter` 键后，程序会自动获取剪贴板中的截图，调用百度 AI 接口进行 **OCR 文字识别** 和 **翻译**，并将结果保存到本地文件，最后自动调用 Sublime Text 展示结果。
 
@@ -42,7 +42,7 @@ cmake ..
 cmake --build . --config Release
 ```
 
-4. 编译完成后，将在 `build` 或 `build/Release` 目录下生成 `STA_OCR.exe`。
+4. 编译完成后，将在 `build` 或 `build/Release` 目录下生成 `OTSE.exe`。
 
 ## ⚙️ 配置指南 (重要)
 
@@ -84,7 +84,7 @@ inline std::string secretKey = "【你的翻译密钥】";
 1. **设置截屏键**：
 
 - 打开 Snipaste `首选项` -> `快捷键` -> `全局快捷键`。
-- 确保 STA_OCR 检测的截屏快捷键与Snipaste对应：设置为Ctrl + Shift + 1
+- 确保 OTSE 检测的截屏快捷键与Snipaste对应：设置为Ctrl + Shift + 1
 - 或者修改代码，使用你想使用的快捷键。
 
 2. **设置回车键行为**：
@@ -102,11 +102,11 @@ inline std::string secretKey = "【你的翻译密钥】";
 
 ### 启动程序
 
-编译好 `STA_OCR.exe`后将其放置在合适的位置双击运行。程序启动后会隐藏在后台运行"。
+编译好 `OTSE.exe`后将其放置在合适的位置双击运行。程序启动后会隐藏在后台运行"。
 
 ### 操作流程
 
-需两个程序同时运行（Snipaste 和 STA_OCR）。
+需两个程序同时运行（Snipaste 和 OTSE）。
 
 1. **截图，激活触发器**：按下 Snipaste 截图快捷键，选定截图区域。
 
@@ -115,7 +115,7 @@ inline std::string secretKey = "【你的翻译密钥】";
 1. **确认识别**：在 **10秒内** 按下 `Enter` 键。
 
 - Snipaste 会将图片复制到剪贴板并退出截图。
-- STA_OCR 检测到 Enter 信号，自动读取剪贴板图片 -> OCR -> 翻译。
+- OTSE 检测到 Enter 信号，自动读取剪贴板图片 -> OCR -> 翻译。
 
 4. **查看结果**：稍等片刻，Sublime Text 将自动弹出，显示识别到的文字及翻译结果。
 
@@ -130,13 +130,13 @@ inline std::string secretKey = "【你的翻译密钥】";
 
 ## 📅 建议：添加开机自启 (计划任务)
 
-为了无需每次手动启动 `STA_OCR.exe`，建议将其添加到 Windows 计划任务中。
+为了无需每次手动启动 `OTSE.exe`，建议将其添加到 Windows 计划任务中。
 
 1. 按 `Win + R`，输入 `taskschd.msc` 打开任务计划程序。
 2. 点击右侧 **“创建任务”**。
 3. **常规**：
 
-- 名称：`STA_OCR_Helper`
+- 名称：`OTSE_Helper`
 - 勾选 **“使用最高权限运行”** (确保键盘钩子生效)。
 
 4. **触发器**：
@@ -146,7 +146,7 @@ inline std::string secretKey = "【你的翻译密钥】";
 5. **操作**：
 
 - 新建 -> 操作：**“启动程序”**。
-- 程序或脚本：选择你的 `STA_OCR.exe` 路径。
+- 程序或脚本：选择你的 `OTSE.exe` 路径。
 - **起始于(可选)**：填写 exe 所在的文件夹路径。
 
 6. **条件**：
