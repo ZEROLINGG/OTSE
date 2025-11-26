@@ -64,7 +64,7 @@ inline std::string sublimePath = "D:\\Sublime Text\\sublime_text.exe";
 inline std::string sublimePath = "notepad.exe"; 
 ```
 
-**配置 API 密钥 (**`**passwd.h**`**)：**
+**配置 API 密钥 (**`passwd.h`**)：**
 
 1. 将项目根目录下的 `passwd.h.eg` 重命名为 `passwd.h`。
 2. 填入你在百度智能云和百度翻译开放平台申请的 Key：
