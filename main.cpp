@@ -125,8 +125,8 @@ void ExecuteDesignatedCode() {
             STARTUPINFOA si = { sizeof(si) };
             PROCESS_INFORMATION pi;
 
-            if (CreateProcessA(NULL, const_cast<char*>(command.c_str()),
-                              NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+            if (CreateProcessA(nullptr, const_cast<char*>(command.c_str()),
+                              nullptr, nullptr, FALSE, 0, nullptr, nullptr, &si, &pi)) {
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);
                 SafeLog("已使用Sublime Text打开文件");
@@ -183,6 +183,13 @@ LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
     }
     else if (vkCode == VK_ESCAPE) {
         if (isTriggerReady.load()) {
+            isTriggerReady = false;
+        }
+    }
+    else if (vkCode == 'C') {
+        bool ctrlDown = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0;
+
+        if (ctrlDown && isTriggerReady.load()) {
             isTriggerReady = false;
         }
     }

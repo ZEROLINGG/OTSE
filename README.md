@@ -1,129 +1,157 @@
-# STA_OCR (OCR 翻译助手)
+# STA_OCR (Snipaste Text Analysis & OCR)
 
-**STA_OCR** 是一个运行在 Windows 平台的 C++ 后台工具。它能够监听全局快捷键，自动读取剪贴板中的图片，调用百度 AI 接口进行高精度文字识别（OCR）和翻译，并将结果保存到文件后自动使用 Sublime Text 打开。
+**STA_OCR** 是一个运行在 Windows 平台下的 C++ 辅助工具，旨在扩展 [Snipaste](https://www.snipaste.com/) 的截图功能。
 
-## ✨ 主要功能
+它作为一个后台进程运行，当用户在使用 Snipaste 截图并按下 `Enter` 键后，程序会自动获取剪贴板中的截图，调用百度 AI 接口进行 **OCR 文字识别** 和 **翻译**，并将结果保存到本地文件，最后自动调用 Sublime Text 展示结果。
 
-- **后台静默运行**: 程序启动后隐藏在后台，通过快捷键触发，不干扰日常工作。
-    
-- **快捷键触发**: 双重确认机制防止误触（`Ctrl + Shift + 1` 激活，`Enter` 执行）。
-    
-- **剪贴板集成**: 直接从剪贴板读取图片数据，无需手动保存文件。
-    
-- **云端 AI 加持**:
-    
-    - **OCR**: 集成百度高精度 OCR API。
-        
-    - **翻译**: 集成百度通用翻译 API。
-        
-- **自动化工作流**: 识别 -> 翻译 -> 保存至桌面 -> 自动打开编辑器查看。
-    
+## 📋 功能特性
 
-## 🛠️ 环境依赖
+- **无缝集成**：配合 Snipaste 的快捷键逻辑，实现“截图 -> 识别 -> 翻译”的一键流。
+- **云端识别**：集成百度智能云 OCR (通用文字识别) 接口。
+- **自动翻译**：集成百度翻译 API，自动将识别结果翻译为中文。
+- **本地归档**：自动在桌面创建临时目录保存截图及识别后的文本文件。
+- **即时预览**：处理完成后自动弹出 Sublime Text 显示结果。
+
+## 🛠️ 编译与环境要求
+
+### 依赖项
 
 - **操作系统**: Windows 10/11
-    
-- **编译环境**:
-    
-    - CMake >= 3.18
-        
-    - 支持 C++20 的编译器 (推荐 MSVC / Visual Studio)
-        
-- **第三方库**:
-    
-    - [nlohmann/json](https://github.com/nlohmann/json "null") (用于解析 JSON 响应)
-        
-    - WinHTTP (Windows 系统自带)
-        
+- **编译器**: 支持 C++20 的编译器 (如 MSVC, MinGW)
+- **构建工具**: CMake (VERSION 3.18+)
+- **第三方库**: [nlohmann/json](https://github.com/nlohmann/json) (用于解析 API 返回数据)
+- **外部软件**:
 
-## ⚙️ 配置说明
+- [Snipaste](https://www.snipaste.com/)
+- [Sublime Text](https://www.sublimetext.com/) (用于查看结果，或者可以使用系统自带的notepad)
 
-在编译之前，您需要修改源码中的配置文件以适配您的环境。
+### 编译步骤
 
-### 1. 配置 API 密钥 (`passwd.h`)
-
-项目根目录下的 `passwd.h` 包含了百度 AI 的密钥。请使用 `passwd.h.eg` 作为模板，填入您自己的密钥：
-
-```
-// passwd.h
-inline std::string aip_baidubce_com = "grant_type=client_credentials&client_id=【您的OCR API Key】&client_secret=【您的OCR Secret Key】";
-inline std::string appid = "【您的翻译 APP ID】";
-inline std::string secretKey = "【您的翻译密钥】";
-```
-
-> **提示**: 您需要前往 [百度智能云](https://cloud.baidu.com/ "null") 申请通用文字识别（高精度版）权限，以及 [百度翻译开放平台](https://www.google.com/search?q=https://api.fanyi.baidu.com/ "null") 申请通用翻译权限。
-
-### 2. 配置编辑器路径 (`main.h`)
-
-默认代码使用 Sublime Text 打开结果文件。如果您的安装路径不同，或想使用其他编辑器（如 VS Code, Notepad++），请修改 `main.h` 中的 `sublimePath` 变量：
-
-```
-// main.h
-// 修改为您实际的编辑器路径
-inline std::string sublimePath = "D:\\Sublime Text\\sublime_text.exe";
-
-// 也可以修改 Access Token 的缓存路径
-inline std::string access_token_txt = R"(C:\Users\您的用户名\Documents\me\access_token.txt)";
-```
-
-## 🚀 编译构建
-
-使用 CMake 进行构建：
+1. 克隆或下载本项目代码。
+2. 在项目根目录下创建一个构建目录：
 
 ```
 mkdir build
 cd build
+```
+
+3. 运行 CMake 配置与构建：
+
+```
 cmake ..
 cmake --build . --config Release
 ```
 
-## 📖 使用指南
+4. 编译完成后，将在 `build` 或 `build/Release` 目录下生成 `STA_OCR.exe`。
 
-1. **启动程序**: 运行编译生成的 `STA_OCR.exe`。控制台会显示 "程序启动成功"。
-    
-2. **复制图片**: 使用截图工具（如 Snipaste, Windows 截图）截图，或复制任意图片到剪贴板。
-    
-3. **触发识别**:
-    
-    - 按下组合键 **`Ctrl + Shift + 1`** (激活触发器，此时程序进入待命状态)。
-        
-    - 在 **10秒内** 按下 **`Enter`** 键确认执行。
-        
-4. **查看结果**:
-    
-    - 程序会在您的 **桌面** 创建 `tmp` 文件夹。
-        
-    - 图片保存为 `tmp.png`，识别与翻译结果保存为 `tmp.txt`。
-        
-    - 程序会自动调用配置的编辑器打开 `tmp.txt`。
-        
+## ⚙️ 配置指南 (重要)
 
-### 快捷键说明
+在运行程序之前，必须完成以下配置，否则程序无法正常工作。
 
-|按键组合|作用|
-|---|---|
-|`Ctrl` + `Shift` + `1`|**激活**: 准备触发，记录当前时间戳|
-|`Enter`|**执行**: 仅在激活后 10 秒内有效，执行 OCR 和翻译|
-|`Esc`|**取消**: 取消激活状态|
+### 1. 代码配置
 
-## 📂 项目结构
+由于部分路径和 API 密钥包含在代码中，编译前请修改以下文件：
+
+**修改** `main.h`**：** 请确认你的 Sublime Text 安装路径。找到以下代码并修改为你实际的 `sublime_text.exe` 路径（或者使用系统自带的notepad）：
 
 ```
-STA_OCR/
-├── CMakeLists.txt      # CMake 构建脚本
-├── main.cpp            # 主程序入口，键盘钩子与业务逻辑调度
-├── main.h              # 全局头文件与配置
-├── https.cpp / .h      # HTTP 请求封装，OCR 与翻译 API 调用逻辑
-├── sotool.cpp / .h     # 工具类：MD5, Base64, 剪贴板操作, 文件操作
-├── passwd.h            # API 密钥配置 (需自行修改)
-└── passwd.h.eg         # 密钥配置模板
+// 修改为你电脑上的路径
+inline std::string sublimePath = "D:\\Sublime Text\\sublime_text.exe"; 
+
+// 或者使用notepad（系统自带，位于环境变量中）
+inline std::string sublimePath = "notepad.exe"; 
 ```
 
-## ⚠️ 注意事项
+**配置 API 密钥 (**`**passwd.h**`**)：**
 
-- **API 配额**: 请留意您的百度 API 免费额度，超额可能会导致服务不可用。
-    
-- **网络连接**: 程序依赖网络访问百度 API，请确保网络通畅。
-    
-- **隐私安全**: 您的 API 密钥（AK/SK）存储在 `passwd.h` 中，请勿将包含真实密钥的代码提交到公开仓库。
-    
+1. 将项目根目录下的 `passwd.h.eg` 重命名为 `passwd.h`。
+2. 填入你在百度智能云和百度翻译开放平台申请的 Key：
+
+```
+// 百度智能云 OCR 配置 ([https://console.bce.baidu.com/ai/](https://console.bce.baidu.com/ai/))
+// 注意：client_id 即 API Key, client_secret 即 Secret Key
+inline std::string aip_baidubce_com = "grant_type=client_credentials&client_id=【你的OCR_API_KEY】&client_secret=【你的OCR_SECRET_KEY】";
+
+// 百度翻译开放平台配置 ([https://api.fanyi.baidu.com/](https://api.fanyi.baidu.com/))
+inline std::string appid = "【你的翻译APPID】";
+inline std::string secretKey = "【你的翻译密钥】";
+```
+
+### 2. Snipaste 软件设置
+
+为了让程序正确拦截和获取图片，需对 Snipaste 进行如下设置：
+
+1. **设置截屏键**：
+
+- 打开 Snipaste `首选项` -> `快捷键` -> `全局快捷键`。
+- 确保 STA_OCR 检测的截屏快捷键与Snipaste对应：设置为Ctrl + Shift + 1
+- 或者修改代码，使用你想使用的快捷键。
+
+2. **设置回车键行为**：
+
+- 打开 Snipaste `首选项` -> `截屏` -> 行为。
+- 确保 **回车键 (Enter)** 的功能被设置为：**“复制并退出截屏”**。
+
+3. **设置图片复制格式**：
+
+- 打开 Snipaste `首选项` -> `常规` (或 `截图` 选项卡下的复制相关设置)。
+- **取消勾选** “复制为 Windows Bitmap 格式”。
+- _说明：本程序主要通过识别剪贴板中的 PNG 格式数据来工作。_
+
+## 🚀 使用方法
+
+### 启动程序
+
+编译好 `STA_OCR.exe`后将其放置在合适的位置双击运行。程序启动后会隐藏在后台运行"。
+
+### 操作流程
+
+需两个程序同时运行（Snipaste 和 STA_OCR）。
+
+1. **准备截图**：按下 Snipaste 截图快捷键（默认 `F1`），选定截图区域。
+2. **激活触发器**：在截图状态下（或截图前），按下组合键 `Ctrl` + Shift + `1`。
+
+- _此时程序进入“待命状态”，等待用户确认。_
+
+1. **确认识别**：在 **10秒内** 按下 `Enter` 键。
+
+- Snipaste 会将图片复制到剪贴板并退出截图。
+- STA_OCR 检测到 Enter 信号，自动读取剪贴板图片 -> OCR -> 翻译。
+
+4. **查看结果**：稍等片刻，Sublime Text 将自动弹出，显示识别到的文字及翻译结果。
+
+- _注意：如果在激活触发器后想取消，可按_ `_Esc_` _键或_ `Ctrl + c` _键取消待命状态。_
+
+### 文件输出
+
+程序会在你的 **桌面** 创建一个 `tmp` 文件夹：
+
+- `desktop/tmp/tmp.png`：最近一次处理的截图。
+- `desktop/tmp/tmp.txt`：最近一次的识别与翻译文本。
+
+## 📅 建议：添加开机自启 (计划任务)
+
+为了无需每次手动启动 `STA_OCR.exe`，建议将其添加到 Windows 计划任务中。
+
+1. 按 `Win + R`，输入 `taskschd.msc` 打开任务计划程序。
+2. 点击右侧 **“创建任务”**。
+3. **常规**：
+
+- 名称：`STA_OCR_Helper`
+- 勾选 **“使用最高权限运行”** (确保键盘钩子生效)。
+
+4. **触发器**：
+
+- 新建 -> 开始任务：**“登录时”**。
+
+5. **操作**：
+
+- 新建 -> 操作：**“启动程序”**。
+- 程序或脚本：选择你的 `STA_OCR.exe` 路径。
+- **起始于(可选)**：填写 exe 所在的文件夹路径。
+
+6. **条件**：
+
+- 取消勾选 “只有在计算机使用交流电源时才启动此任务”（防止笔记本没插电不启动）。
+
+7. 点击确定保存。下次重启电脑后程序将自动在后台运行。

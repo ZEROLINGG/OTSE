@@ -263,7 +263,7 @@ std::string run_ocr(const std::string& img_base64) {
         auto start_time = std::chrono::high_resolution_clock::now();
 
         std::string host = "aip.baidubce.com";
-        std::string path = "/rest/2.0/ocr/v1/accurate?access_token=" + access_token;
+        std::string path = "/rest/2.0/ocr/v1/general?access_token=" + access_token;
         std::string post_data = "image=" + url_encode(img_base64);
         std::string headers = "Content-Type: application/x-www-form-urlencoded";
 

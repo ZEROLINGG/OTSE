@@ -5,6 +5,8 @@
 #ifndef STA_OCR_PASSWD_H
 #define STA_OCR_PASSWD_H
 
+#include <iostream>
+
 inline std::string aip_baidubce_com = "grant_type=client_credentials&client_id=<<ak>>&client_secret=<<sk>>";
 inline std::string appid = "";
 inline std::string secretKey = "";

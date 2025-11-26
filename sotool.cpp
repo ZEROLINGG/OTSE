@@ -6,11 +6,11 @@
 
 
 class MD5 {
-    uint32_t state[4] = {};  // ABCD×´Ì¬
-    uint32_t count[2] = {};  // Î»¼ÆÊı
-    uint8_t buffer[64] = {}; // ÊäÈë»º³åÇø
+    uint32_t state[4] = {};  // ABCDçŠ¶æ€
+    uint32_t count[2] = {};  // ä½è®¡æ•°
+    uint8_t buffer[64] = {}; // è¾“å…¥ç¼“å†²åŒº
 
-    // ¸¨Öúº¯Êı
+    // è¾…åŠ©å‡½æ•°
     static inline uint32_t F(uint32_t x, uint32_t y, uint32_t z) {
         return (x & y) | (~x & z);
     }
@@ -55,13 +55,13 @@ class MD5 {
         uint32_t a = state[0], b = state[1], c = state[2], d = state[3];
         uint32_t x[16];
 
-        // ×Ö½Ú×ª»»Îª32Î»ÕûÊı£¨Ğ¡¶ËĞò£©
+        // å­—èŠ‚è½¬æ¢ä¸º32ä½æ•´æ•°ï¼ˆå°ç«¯åºï¼‰
         for (int i = 0, j = 0; i < 16; ++i, j += 4) {
             x[i] = ((uint32_t)block[j]) | (((uint32_t)block[j+1]) << 8) |
                    (((uint32_t)block[j+2]) << 16) | (((uint32_t)block[j+3]) << 24);
         }
 
-        // µÚ1ÂÖ
+        // ç¬¬1è½®
         FF(a, b, c, d, x[ 0],  7, 0xd76aa478); FF(d, a, b, c, x[ 1], 12, 0xe8c7b756);
         FF(c, d, a, b, x[ 2], 17, 0x242070db); FF(b, c, d, a, x[ 3], 22, 0xc1bdceee);
         FF(a, b, c, d, x[ 4],  7, 0xf57c0faf); FF(d, a, b, c, x[ 5], 12, 0x4787c62a);
@@ -71,7 +71,7 @@ class MD5 {
         FF(a, b, c, d, x[12],  7, 0x6b901122); FF(d, a, b, c, x[13], 12, 0xfd987193);
         FF(c, d, a, b, x[14], 17, 0xa679438e); FF(b, c, d, a, x[15], 22, 0x49b40821);
 
-        // µÚ2ÂÖ
+        // ç¬¬2è½®
         GG(a, b, c, d, x[ 1],  5, 0xf61e2562); GG(d, a, b, c, x[ 6],  9, 0xc040b340);
         GG(c, d, a, b, x[11], 14, 0x265e5a51); GG(b, c, d, a, x[ 0], 20, 0xe9b6c7aa);
         GG(a, b, c, d, x[ 5],  5, 0xd62f105d); GG(d, a, b, c, x[10],  9, 0x02441453);
@@ -81,7 +81,7 @@ class MD5 {
         GG(a, b, c, d, x[13],  5, 0xa9e3e905); GG(d, a, b, c, x[ 2],  9, 0xfcefa3f8);
         GG(c, d, a, b, x[ 7], 14, 0x676f02d9); GG(b, c, d, a, x[12], 20, 0x8d2a4c8a);
 
-        // µÚ3ÂÖ
+        // ç¬¬3è½®
         HH(a, b, c, d, x[ 5],  4, 0xfffa3942); HH(d, a, b, c, x[ 8], 11, 0x8771f681);
         HH(c, d, a, b, x[11], 16, 0x6d9d6122); HH(b, c, d, a, x[14], 23, 0xfde5380c);
         HH(a, b, c, d, x[ 1],  4, 0xa4beea44); HH(d, a, b, c, x[ 4], 11, 0x4bdecfa9);
@@ -91,7 +91,7 @@ class MD5 {
         HH(a, b, c, d, x[ 9],  4, 0xd9d4d039); HH(d, a, b, c, x[12], 11, 0xe6db99e5);
         HH(c, d, a, b, x[15], 16, 0x1fa27cf8); HH(b, c, d, a, x[ 2], 23, 0xc4ac5665);
 
-        // µÚ4ÂÖ
+        // ç¬¬4è½®
         II(a, b, c, d, x[ 0],  6, 0xf4292244); II(d, a, b, c, x[ 7], 10, 0x432aff97);
         II(c, d, a, b, x[14], 15, 0xab9423a7); II(b, c, d, a, x[ 5], 21, 0xfc93a039);
         II(a, b, c, d, x[12],  6, 0x655b59c3); II(d, a, b, c, x[ 3], 10, 0x8f0ccc92);
@@ -171,7 +171,7 @@ std::string md5(const std::string& str) {
 }
 
 
-// Base64±àÂëº¯Êı
+// Base64ç¼–ç å‡½æ•°
 std::string base64_encode(const std::vector<uint8_t>& data) {
     static auto base64_chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -219,23 +219,23 @@ std::string base64_encode(const std::vector<uint8_t>& data) {
 }
 
 
-// URL±àÂë
+// URLç¼–ç 
 std::string url_encode(const std::string& str) {
     std::ostringstream escaped;
     escaped.fill('0');
     escaped << std::hex;
 
     for (char c : str) {
-        // ±£ÁôÎ´±àÂëµÄ×Ö·û: A-Z a-z 0-9 - _ . ~
+        // ä¿ç•™æœªç¼–ç çš„å­—ç¬¦: A-Z a-z 0-9 - _ . ~
         if (std::isalnum(static_cast<unsigned char>(c)) ||
             c == '-' || c == '_' || c == '.' || c == '~') {
             escaped << c;
             }
-        // ¿Õ¸ñ±àÂëÎª +
+        // ç©ºæ ¼ç¼–ç ä¸º +
         else if (c == ' ') {
             escaped << '+';
         }
-        // ÆäËû×Ö·û½øĞĞ°Ù·ÖºÅ±àÂë
+        // å…¶ä»–å­—ç¬¦è¿›è¡Œç™¾åˆ†å·ç¼–ç 
         else {
             escaped << std::uppercase;
             escaped << '%' << std::setw(2) << static_cast<int>(static_cast<unsigned char>(c));
@@ -245,7 +245,7 @@ std::string url_encode(const std::string& str) {
 
     return escaped.str();
 }
-// Éú³ÉËæ»úÊı£¨32768µ½65536Ö®¼ä£©
+// ç”Ÿæˆéšæœºæ•°ï¼ˆ32768åˆ°65536ä¹‹é—´ï¼‰
 int generate_random_salt() {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -253,7 +253,7 @@ int generate_random_salt() {
     return dis(gen);
 }
 
-// UTF-8 string ×ª wstring
+// UTF-8 string è½¬ wstring
 std::wstring StringToWString(const std::string& str) {
     if (str.empty()) return std::wstring();
     int size_needed = MultiByteToWideChar(CP_UTF8, 0, &str[0], (int)str.size(), NULL, 0);
@@ -262,7 +262,7 @@ std::wstring StringToWString(const std::string& str) {
     return wstrTo;
 }
 
-// wstring ×ª UTF-8 string
+// wstring è½¬ UTF-8 string
 std::string WStringToString(const std::wstring& wstr) {
     if (wstr.empty()) return std::string();
     int size_needed = WideCharToMultiByte(CP_UTF8, 0, &wstr[0], (int)wstr.size(), NULL, 0, NULL, NULL);
@@ -271,13 +271,13 @@ std::string WStringToString(const std::wstring& wstr) {
     return strTo;
 }
 
-// ¼ì²éÎÄ¼şÊÇ·ñ´æÔÚ
+// æ£€æŸ¥æ–‡ä»¶æ˜¯å¦å­˜åœ¨
 bool file_exists(const std::string& filename) {
     std::ifstream f(filename);
     return f.good();
 }
 
-// »ñÈ¡¼ôÌù°åÍ¼Æ¬
+// è·å–å‰ªè´´æ¿å›¾ç‰‡
 bool GetClipboardPNG(std::vector<uint8_t>& pngData)
 {
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -313,16 +313,19 @@ bool GetClipboardPNG(std::vector<uint8_t>& pngData)
     return true;
 }
 
-// »ñÈ¡×ÀÃæÂ·¾¶
+// è·å–æ¡Œé¢è·¯å¾„
 std::string GetDesktopPath() {
-    char path[MAX_PATH];
-    if (SHGetFolderPathA(nullptr, CSIDL_DESKTOPDIRECTORY, nullptr, 0, path) == S_OK) {
-        return std::string(path);
+    PWSTR wpath = nullptr;
+    HRESULT hr = SHGetKnownFolderPath(FOLDERID_Desktop, 0, nullptr, &wpath);
+    if (FAILED(hr) || wpath == nullptr) {
+        return "";
     }
-    return "";
+    std::wstring wstrPath(wpath);
+    CoTaskMemFree(wpath);
+    return WStringToString(wstrPath);
 }
 
-// ´´½¨Ä¿Â¼£¨Èç¹û²»´æÔÚ£©
+// åˆ›å»ºç›®å½•ï¼ˆå¦‚æœä¸å­˜åœ¨ï¼‰
 bool CreateDirectoryIfNotExists(const std::string& path) {
     DWORD attr = GetFileAttributesA(path.c_str());
     if (attr == INVALID_FILE_ATTRIBUTES) {
@@ -331,7 +334,7 @@ bool CreateDirectoryIfNotExists(const std::string& path) {
     return (attr & FILE_ATTRIBUTE_DIRECTORY) != 0;
 }
 
-// ±£´æPNGÍ¼Æ¬µ½ÎÄ¼ş
+// ä¿å­˜PNGå›¾ç‰‡åˆ°æ–‡ä»¶
 bool SavePNGToFile(const std::vector<uint8_t>& png, const std::string& filepath) {
     try {
         std::ofstream file(filepath, std::ios::binary);
@@ -346,7 +349,7 @@ bool SavePNGToFile(const std::vector<uint8_t>& png, const std::string& filepath)
     }
 }
 
-// ±£´æÎÄ±¾µ½ÎÄ¼ş£¨¸²¸ÇÄ£Ê½£©
+// ä¿å­˜æ–‡æœ¬åˆ°æ–‡ä»¶ï¼ˆè¦†ç›–æ¨¡å¼ï¼‰
 bool SaveTextToFile(const std::string& text, const std::string& filepath, bool append) {
     try {
         std::ofstream file;
