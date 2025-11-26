@@ -1,4 +1,4 @@
-# STA_OCR (Snipaste Text Analysis & OCR)
+# STA_OCR
 
 **STA_OCR** 是一个运行在 Windows 平台下的 C++ 辅助工具，旨在扩展 [Snipaste](https://www.snipaste.com/) 的截图功能。
 
@@ -94,7 +94,7 @@ inline std::string secretKey = "【你的翻译密钥】";
 
 3. **设置图片复制格式**：
 
-- 打开 Snipaste `首选项` -> `常规` (或 `截图` 选项卡下的复制相关设置)。
+- 打开 Snipaste `首选项` -> `截屏` -> 行为。
 - **取消勾选** “复制为 Windows Bitmap 格式”。
 - _说明：本程序主要通过识别剪贴板中的 PNG 格式数据来工作。_
 
@@ -108,8 +108,7 @@ inline std::string secretKey = "【你的翻译密钥】";
 
 需两个程序同时运行（Snipaste 和 STA_OCR）。
 
-1. **准备截图**：按下 Snipaste 截图快捷键（默认 `F1`），选定截图区域。
-2. **激活触发器**：在截图状态下（或截图前），按下组合键 `Ctrl` + Shift + `1`。
+1. **截图，激活触发器**：按下 Snipaste 截图快捷键，选定截图区域。
 
 - _此时程序进入“待命状态”，等待用户确认。_
 
@@ -120,7 +119,7 @@ inline std::string secretKey = "【你的翻译密钥】";
 
 4. **查看结果**：稍等片刻，Sublime Text 将自动弹出，显示识别到的文字及翻译结果。
 
-- _注意：如果在激活触发器后想取消，可按_ `_Esc_` _键或_ `Ctrl + c` _键取消待命状态。_
+- _注意：激活触发器后会在超时和以下按键取消： `Esc` 以及 `Ctrl + c`
 
 ### 文件输出
 
